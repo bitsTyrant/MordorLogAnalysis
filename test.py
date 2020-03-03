@@ -1,0 +1,3 @@
+from LogSample import LogStructureSampleList
+
+print(LogStructureSampleList)
