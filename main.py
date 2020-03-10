@@ -1,77 +1,64 @@
 import os
-from json_serialization import serilialize
-from log_structure_check import structure_check
-from log_type_identify import type_identify
-from log_type_identify import log_simplify
-from log_type_info import log_name_valid
+from arrange_by_type import sample_by_type
 
-currentDir = '/covenant_dcsync_all/'
-targetFileName = 'covenant_dcsync_all_2019-10-27064128.json'
+file_name = 'covenant_dcsync_all_2019-10-27064128.json'
 
 def main_menu():
     print ('======== M E N U =======')
-    print ('1. 按照JSON标准, 格式化Mordor项目中small dataset中文件.')
-    print ('\tMordor')
-    print ('2. 检查日志中是否存在不同的结构.')
-    print ('3. 搜索日志库样本, 并检索新日志类别.并简化日志')
-    print ('4. 选择新的日志类别')
-    print ('5. 根据公共信息模型, 提取实体及实体关系.')
-    print ('\t 目前公共信息模型包括三类:')
-    print ('\t (1) 进程信息')
-    print ('\t (2) 主机发生的动作')
-    print ('\t (3) 登陆用户')
-    print ('0. 退出')
+    print ('选项1. 按日志名称分类待分析文件, 并分析新出现的日志类别')
+    print ('选项2. 压缩日志')
+    print ('选项3. 根据公共信息模型，提取实体及实体关系. 目前公共信息模型包括三类:(1)进程信息; (2)主机发生的动作;(3)用户登陆会话期间的动作')
+    print ('选项0. 退出')
+
+def echo_1():
+    print('\t\t按日志名称分类待分析文件:')
+    print('\t\t\t将格式结构未识别的日志写入 abnormal')
+    print('\t\t\t将日志类别未识别的日志写入 noval')
+    print('\t\t\t已识别的日志类别写入 exist_type')
+    print('\t\t\t未识别的日志类别写入 noval_type')
+    print('\t\t\tlog_name由类别名称和编号组成, 类似 sysmon_3')
+    print('\t\t\t将已识别的日志以日志名称为文件名 {log_name}, 写入 exist/{log_name}')
+    print('\t\t\t将新类别的日志以日志名称为文件名 {log_name}, 写入 noval/{log_name}')
+def option_1():
+    sample_by_type(file_name)
 
 '''
-在主菜单中选择“4. 选择新的日志类别”以后弹出的子菜单
+第二步: 
+    对已识别的日志和新类别:
+        获取日志结构的全集, 并写入 [exist|noval]/{log_name}_structure 文件
 '''
-def sub_menu_4():
-    print ('请输入待查询的日志类别及编号. 格式为"事件类别_事件编号", 例如sysmon_10, winSec_4624')
-    print ('输入“OFF”返回主菜单')
 
-if __name__ == "__main__":
+
+'''
+第一步:
+    等待人工挑选 structure 文件中重要的属性
+    按照 人工挑选的结果, 压缩文件
+'''
+def option_2():
+    return True
+
+if __name__ == '__main__':
     while True:
         main_menu()
-        try:
-            choice = int(input('select:\n'))
-            if choice == 1:
-                serilialize(currentDir, targetFileName)
-            elif choice == 2:
-                path = os.path.abspath('./MordorLogAnalysis/LogStack/') + currentDir
-                sFileName = path + targetFileName  
-                
-                try:
-                    sFile = open(sFileName)
-                except:
-                    print ('fail to open file: ', sFileName)
-                num = 0
-                line = sFile.readline()
-                while line:
-                    num = num + 1
-                    print (num)
-                    structure_check(line, currentDir)
-                    line = sFile.readline()
-                sFile.close()
-
-            elif choice == 3:
-                type_identify(currentDir, targetFileName)
-            elif choice == 4:   
-                sub_menu_4()
-                log_name = input('请输入:\n') 
-                while log_name != 'OFF':
-                    # 当log_name_valid(log_name)返回True的时候，补充分析的处理代码 
-                    log_name_valid(log_name)
-                    sub_menu_4()
-                    log_name = input('请输入:\n')
-            elif choice == 0:
+        try: 
+            choice = input('select:\n')
+            if choice == '1':
+                echo_1()
+                option_1()
+            elif choice == '2':
+                echo_2()
+                option_2()
+            elif choice == '0':
                 os._exit(0)
-            else:
-                print ('bad choice')
         except:
-            print ('not optional')
+            print ('OK.')
 
         print ('\n\n\n\n')
 
-    
 
-    
+
+
+
+
+
+
