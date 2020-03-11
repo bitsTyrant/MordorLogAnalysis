@@ -138,29 +138,26 @@ def sample_by_type(file_name):
         line = read_file.readline()
 
     write_to_file(sample_by_type, exist_type, noval_type)
-    print('------------  ' + str(count))
-    print(noval_type)
-    print(exist_type)
 
     # 将 exist_type 和 noval_type 写入根目录对应文件中
-    file_name = os.path.join(path, 'exist_type')
+    file_name = os.path.join(path, 'exist_type_list')
     try:
         exist_type_list = open(file_name, 'a')
     except:
         print('fail to open file: ' + exist_type_list)
 
     for log_name in exist_type:
-        exist_type_list.write(log_name)
+        exist_type_list.write(log_name + '\n')
     exist_type_list.close()
 
-    file_name = os.path.join(path, 'noval_type')
+    file_name = os.path.join(path, 'noval_type_list')
     try:
         noval_type_list = open(file_name, 'a')
     except:
         print('fail to open file: ' + noval_type_list)
 
     for log_name in noval_type:
-        noval_type_list.write(log_name)
+        noval_type_list.write(log_name + '\n')
     noval_type_list.close()
 
     return True
